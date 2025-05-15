@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코딩 없이 AI로 무료 웹사이트 만들기</title>
+    <style>
+        :root {
+            --primary-bg: #F1F0E9;
+            --text-color: #2E3A49;
+            --accent-color: #4A6FA5;
+            --secondary-accent: #6BB77B;
+            --highlight: #E8756A;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --shadow: rgba(46, 58, 73, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: #3A5B8C;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-accent);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #599864;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--accent-color);
+            color: var(--white);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            background-color: var(--primary-bg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        
+        .hero-content {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+        
+        .highlight {
+            color: var(--highlight);
+        }
+        
+        .accent {
+            color: var(--accent-color);
+        }
+        
+        /* Problem Solution Section */
+        .problem-solution {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+        
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .card {
+            background-color: var(--primary-bg);
+            border-radius: 12px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px var(--shadow);
+            flex: 1;
+            min-width: 300px;
+            max-width: 380px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .card p {
+            opacity: 0.9;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: var(--primary-bg);
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 80px;
+            gap: 50px;
+        }
+        
+        .feature-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .feature-content {
+            flex: 1;
+        }
+        
+        .feature-image {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .feature-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px var(--shadow);
+        }
+        
+        .feature-item h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-item p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-list li:before {
+            content: '✓';
+            color: var(--secondary-accent);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            padding: 100px 0;
+            background-color: var(--white);
+            text-align: center;
+        }
+        
+        .metrics {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        
+        .metric-label {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        
+        .testimonials {
+            display: flex;
+            gap: 30px;
+            margin-top: 60px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+        
+        .testimonial {
+            background-color: var(--primary-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 20px var(--shadow);
+            min-width: 300px;
+            max-width: 380px;
+            position: relative;
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-details h4 {
+            margin-bottom: 5px;
+        }
+        
+        .author-details p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Trust Section */
+        .trust {
+            padding: 80px 0;
+            background-color: var(--primary-bg);
+            text-align: center;
+        }
+        
+        .trust-elements {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .trust-element {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 250px;
+        }
+        
+        .trust-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .trust-element h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .trust-element p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background-color: var(--accent-color);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta .btn {
+            background-color: var(--white);
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            padding: 15px 40px;
+        }
+        
+        .cta .btn:hover {
+            background-color: var(--primary-bg);
+        }
+        
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 20px;
+        }
+        
+        .faq-question {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        .faq-answer {
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--text-color);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-logo h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .footer-logo p {
+            opacity: 0.8;
+            max-width: 300px;
+        }
+        
+        .footer-links {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--white);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            text-align: center;
+            line-height: 40px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-container {
+                flex-direction: column;
+            }
+            
+            .feature-item {
+                flex-direction: column !important;
+            }
+            
+            .feature-image {
+                order: 1;
+            }
+            
+            .feature-content {
+                order: 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .metrics {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .trust-elements {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: var(--highlight);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 10px;
+            text-transform: uppercase;
+        }
+        
+        .feature-badge {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container container">
+            <div class="logo">마이퍼스트웹</div>
+            <nav class="nav-links">
+                <a href="#features">특징</a>
+                <a href="#proof">사용자 후기</a>
+                <a href="#faq">자주 묻는 질문</a>
+                <a href="#cta">유튜브 채널</a>
+            </nav>
+            <a href="#cta" class="btn">무료 시작하기</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container container">
+            <div class="hero-content">
+                <span class="badge">100% 무료</span>
+                <h1>코딩 없이 <span class="highlight">AI로</span> 전문적인 웹사이트 만들기</h1>
+                <p>비용 걱정, 전문 지식 필요 없이 인공지능으로 쉽고 빠르게 퀄리티 높은 웹사이트를 제작하는 방법을 공유합니다. 이제 웹사이트 제작은 누구나 할 수 있습니다.</p>
+                <a href="#cta" class="btn">유튜브 채널 바로가기 →</a>
+                <a href="#features" class="btn btn-outline" style="margin-left: 15px;">기능 알아보기</a>
+            </div>
+            <div class="hero-image">
+                <img src="main.png" alt="AI 웹사이트 제작 과정">
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Solution Section -->
+    <section class="problem-solution" id="problem">
+        <div class="container">
+            <h2 class="section-title">웹사이트 제작의 고민, 이제 그만!</h2>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <h3>비용 부담</h3>
+                    <p>웹 개발자 고용이나 유료 서비스 비용이 부담되시나요? AI를 활용한 무료 방법으로 해결해 드립니다.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>코딩 지식 부족</h3>
+                    <p>HTML, CSS, JavaScript 같은 코딩 언어를 모르셔도 걱정 마세요. AI가 코드를 대신 작성해 드립니다.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⏰</div>
+                    <h3>시간 부족</h3>
+                    <p>웹사이트 제작에 며칠, 몇 주를 투자할 시간이 없으신가요? AI로 몇 분 내에 완성할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">AI 웹사이트 제작의 특별함</h2>
+            
+            <div class="feature-item">
+                <div class="feature-content">
+                    <span class="feature-badge">누구나 쉽게</span>
+                    <h3>코딩 지식 없이도 전문적인 웹사이트</h3>
+                    <p>AI 도구를 활용해 디자인부터 배포까지 모든 과정을 코딩 없이 진행하는 방법을 단계별로 알려드립니다.</p>
+                    <ul class="feature-list">
+                        <li>직관적인 AI 인터페이스로 원하는 디자인 구현</li>
+                        <li>자연어로 요청하면 AI가 코드로 변환</li>
+                        <li>템플릿 선택부터 커스터마이징까지 모두 가능</li>
+                        <li>모바일 최적화 자동 적용</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="main.png" alt="AI 웹사이트 제작 화면">
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-content">
+                    <span class="feature-badge">시간 절약</span>
+                    <h3>몇 분 만에 완성되는 전문가급 웹사이트</h3>
+                    <p>복잡한 웹 개발 과정을 AI가 대신해 빠르게 결과물을 만들어냅니다. 시간은 절약하고 품질은 높이세요.</p>
+                    <ul class="feature-list">
+                        <li>평균 15분 이내 웹사이트 초안 완성</li>
+                        <li>수정 사항을 텍스트로 입력하면 즉시 반영</li>
+                        <li>반복적인 작업을 AI가 자동화</li>
+                        <li>디자인 요소 자동 최적화</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/api/placeholder/450/300" alt="AI 시간 절약 시연">
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-content">
+                    <span class="feature-badge">100% 무료</span>
+                    <h3>비용 부담 없는 웹사이트 구축</h3>
+                    <p>무료 AI 도구와 플랫폼을 활용해 비용 없이 전문적인 웹사이트를 만드는 방법을 공유합니다.</p>
+                    <ul class="feature-list">
+                        <li>무료 AI 웹 빌더 활용법 안내</li>
+                        <li>무료 호스팅 서비스 연결 방법</li>
+                        <li>오픈소스 리소스 활용 전략</li>
+                        <li>광고 없는 깔끔한 웹사이트 구현</li>
+                    </ul>
+                </div>
+                <div class="feature-image">
+                    <img src="/api/placeholder/450/300" alt="무료 웹사이트 제작 도구">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <!-- <section class="social-proof" id="proof">
+        <div class="container">
+            <h2 class="section-title">많은 분들이 이미 경험하고 있습니다</h2>
+            
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-number">10,000+</div>
+                    <div class="metric-label">구독자</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-number">500+</div>
+                    <div class="metric-label">웹사이트 제작 성공</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-number">4.9/5</div>
+                    <div class="metric-label">평균 만족도</div>
+                </div>
+            </div>
+            
+            <div class="testimonials">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "코딩을 전혀 몰랐는데, 유튜브 채널을 보고 직접 따라하니 30분 만에 내 카페 홈페이지가 완성됐어요. 비용도 안 들고 정말 신기했습니다!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="김미영님">
+                        </div>
+                        <div class="author-details">
+                            <h4>김미영</h4>
+                            <p>카페 사장님</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "전문 개발자에게 맡기려고 했는데 비용이 부담스러웠어요. 이 채널을 통해 AI로 직접 만들었더니 오히려 더 마음에 드는 결과가 나왔습니다!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="이준호님">
+                        </div>
+                        <div class="author-details">
+                            <h4>이준호</h4>
+                            <p>스타트업 대표</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        "학생이라 웹개발 비용이 부담됐는데, 유튜브 채널을 보고 AI로 포트폴리오 사이트를 만들었어요. 면접관들이 제가 직접 코딩한 줄 알고 놀라셨어요!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/api/placeholder/50/50" alt="박지현님">
+                        </div>
+                        <div class="author-details">
+                            <h4>박지현</h4>
+                            <p>디자인 전공 학생</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Trust Elements -->
+    <section class="trust">
+        <div class="container">
+            <h2 class="section-title">누구나 따라할 수 있도록 제공합니다</h2>
+            
+            <div class="trust-elements">
+                <div class="trust-element">
+                    <div class="trust-icon">📝</div>
+                    <h4>상세한 튜토리얼</h4>
+                    <p>초보자도 쉽게 따라할 수 있는 단계별 가이드와 설명을 제공합니다.</p>
+                </div>
+                <div class="trust-element">
+                    <div class="trust-icon">🔄</div>
+                    <h4>지속적인 업데이트</h4>
+                    <p>최신 AI 도구와 기술을 계속해서 소개하고 적용 방법을 알려드립니다.</p>
+                </div>
+                <div class="trust-element">
+                    <div class="trust-icon">🤝</div>
+                    <h4>커뮤니티 지원</h4>
+                    <p>댓글과 커뮤니티를 통해 질문에 답변하고 도움을 드립니다.</p>
+                </div>
+                <div class="trust-element">
+                    <div class="trust-icon">🎓</div>
+                    <h4>전문적인 콘텐츠</h4>
+                    <p>웹 개발과 AI에 대한 전문 지식을 쉽게 이해할 수 있게 전달합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <h2>지금 바로 AI로 무료 웹사이트 만들기</h2>
+            <p>유튜브 채널을 구독하고 코딩 없이도 전문적인 웹사이트를 제작하는 방법을 배워보세요. 매주 새로운 팁과 기술을 공유합니다.</p>
+            <a href="https://www.youtube.com/@myfirstweb-taetae" class="btn">유튜브 채널 구독하기 →</a>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">자주 묻는 질문</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">정말 코딩 지식이 전혀 없어도 웹사이트를 만들 수 있나요?</div>
+                    <div class="faq-answer">네, 코딩 지식이 전혀 없어도 가능합니다. AI 도구가 여러분의 요청을 이해하고 자동으로 코드를 생성해주기 때문에 코딩 경험이 없는 분들도 쉽게 따라할 수 있습니다.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">정말 비용이 전혀 들지 않나요?</div>
+                    <div class="faq-answer">네, 유튜브 채널에서 소개하는 방법들은 모두 무료 AI 도구와 무료 호스팅 서비스를 활용합니다. 물론 더 고급 기능을 원하신다면 유료 서비스로 업그레이드할 수도 있지만, 기본적인 웹사이트는 완전히 무료로 제작 가능합니다.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">어떤 종류의 웹사이트를 만들 수 있나요?</div>
+                    <div class="faq-answer">포트폴리오, 개인 블로그, 소규모 비즈니스 웹사이트, 랜딩 페이지, 온라인 이력서 등 다양한 유형의 웹사이트를 제작할 수 있습니다. 유튜브 채널에서는 각 유형별 제작 방법을 상세히 다룹니다.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">웹사이트가 전문적으로 보이나요?</div>
+                    <div class="faq-answer">네, AI가 생성하는 웹사이트는 전문 개발자가 만든 것처럼 보입니다. 모던한 디자인, 반응형 레이아웃, 다양한 인터랙션 효과 등을 모두 구현할 수 있으며, 사용자의 피드백에 따라 계속 개선할 수 있습니다.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">얼마나 자주 새로운 콘텐츠가 업로드되나요?</div>
+                    <div class="faq-answer">매주 1-2개의 새로운 튜토리얼과 팁을 업로드합니다. 최신 AI 도구와 기술을 빠르게 소개하고 적용 방법을 알려드립니다.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">도메인 이름도 무료인가요?</div>
+                    <div class="faq-answer">기본 서브도메인은 무료로 제공됩니다. 예를 들어 'yoursite.freehosting.com' 형태입니다. 커스텀 도메인(예: yourname.com)을 원하시면 도메인 등록 비용이 발생할 수 있지만, 연간 1만원 내외로 매우 저렴합니다.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>AI 웹사이트 마스터</h3>
+                    <p>인공지능으로 누구나 쉽게 웹사이트를 만들 수 있도록 돕는 유튜브 채널입니다. 코딩 없이, 비용 없이 전문적인 웹사이트를 만들어보세요.</p>
+                    <div class="social-links">
+                        <a href="#">Y</a>
+                        <a href="#">I</a>
+                        <a href="#">F</a>
+                        <a href="#">T</a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>콘텐츠</h4>
+                    <ul>
+                        <li><a href="#features">주요 기능</a></li>
+                        <li><a href="#proof">사용자 후기</a></li>
+                        <li><a href="#faq">자주 묻는 질문</a></li>
+                        <li><a href="#cta">유튜브 채널</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>리소스</h4>
+                    <ul>
+                        <li><a href="#">튜토리얼</a></li>
+                        <li><a href="#">블로그</a></li>
+                        <li><a href="#">무료 템플릿</a></li>
+                        <li><a href="#">커뮤니티</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>문의하기</h4>
+                    <ul>
+                        <li><a href="#">이메일</a></li>
+                        <li><a href="#">디스코드</a></li>
+                        <li><a href="#">유튜브 댓글</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2025 AI 웹사이트 마스터. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 스크롤 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollLinks = document.querySelectorAll('a[href^="#"]');
+            
+            for (const scrollLink of scrollLinks) {
+                scrollLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
