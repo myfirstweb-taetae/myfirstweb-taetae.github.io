@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 후기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F1F0E9;
+            color: #2E3A49;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #8B7355, #A68B5B);
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #E8E6D9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #8B7355;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .review-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            border: 1px solid #E8E6D9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8B7355, #A68B5B, #D4C4A0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .review-info {
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .stars {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 1.2rem;
+            margin-right: 2px;
+        }
+
+        .star.empty {
+            color: #DDD;
+        }
+
+        .review-text {
+            color: #2E3A49;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .review-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .helpful-section {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .helpful-btn {
+            background: none;
+            border: 1px solid #DDD;
+            border-radius: 20px;
+            padding: 5px 12px;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .helpful-btn:hover {
+            background: #8B7355;
+            color: white;
+            border-color: #8B7355;
+        }
+
+        .verified-badge {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .load-more {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8B7355, #A68B5B);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.3);
+        }
+
+        .load-more:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 115, 85, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .review-card {
+                padding: 20px;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .profile-img {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .review-footer {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>고객 후기</h1>
+            <p>실제 고객들이 남긴 솔직한 후기를 확인해보세요</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">평균 별점</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">1,247</div>
+                <div class="stat-label">총 후기 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">96%</div>
+                <div class="stat-label">만족도</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">재구매율</div>
+            </div>
+        </div>
+
+        <div class="reviews-grid" id="reviewsGrid">
+            <!-- Reviews will be dynamically loaded here -->
+        </div>
+
+        <button class="load-more" onclick="loadMoreReviews()">더 많은 후기 보기</button>
+    </div>
+
+    <script>
+        const reviews = [
+            {
+                name: "김민지",
+                initial: "김",
+                date: "2025년 8월 28일",
+                rating: 5,
+                text: "정말 만족스러운 구매였어요! 품질도 좋고 배송도 빨랐습니다. 특히 고객 서비스가 정말 친절해서 감동받았어요. 다음에도 꼭 이용할게요. 강력 추천합니다!",
+                helpful: 23,
+                verified: true
+            },
+            {
+                name: "박현우",
+                initial: "박",
+                date: "2025년 8월 26일",
+                rating: 4,
+                text: "전체적으로 만족합니다. 가격 대비 품질이 좋아요. 다만 포장이 조금 아쉬웠어요. 그래도 제품 자체는 기대 이상이었습니다. 재구매 의향 있어요.",
+                helpful: 15,
+                verified: true
+            },
+            {
+                name: "이수연",
+                initial: "이",
+                date: "2025년 8월 25일",
+                rating: 5,
+                text: "와... 진짜 대박이에요! 친구 추천으로 구매했는데 왜 진작 안 샀나 후회됩니다. 디자인도 예쁘고 실용성도 좋아요. 주변 사람들한테 다 추천했어요 ㅎㅎ",
+                helpful: 31,
+                verified: false
+            },
+            {
+                name: "정재호",
+                initial: "정",
+                date: "2025년 8월 24일",
+                rating: 5,
+                text: "몇 년째 이용하고 있는데 항상 만족해요. 품질 일정하고 A/S도 잘 해주시고... 이번에도 역시 기대를 저버리지 않네요. 믿고 쓰는 브랜드입니다.",
+                helpful: 18,
+                verified: true
+            },
+            {
+                name: "최영희",
+                initial: "최",
+                date: "2025년 8월 23일",
+                rating: 4,
+                text: "생각보다 좋네요! 처음에는 가격 때문에 고민했는데 사길 잘한 것 같아요. 사용하기 편하고 내구성도 괜찮은 편이에요. 별 하나 뺀 이유는 색상 선택이 좀 한정적이라서요.",
+                helpful: 12,
+                verified: true
+            },
+            {
+                name: "강동민",
+                initial: "강",
+                date: "2025년 8월 22일",
+                rating: 5,
+                text: "완전 강추!! 온라인으로 주문했는데 생각보다 훨씬 좋아요. 사진으로 보는 것보다 실물이 더 예뻐요. 배송도 하루 만에 왔고, 포장도 정성스럽게 해주셔서 기분 좋았어요.",
+                helpful: 27,
+                verified: false
+            },
+            {
+                name: "윤서진",
+                initial: "윤",
+                date: "2025년 8월 21일",
+                rating: 3,
+                text: "나쁘지 않아요. 기능적으로는 문제없고 가격도 합리적인 편이에요. 다만 디자인이 좀 아쉽고, 설명서가 불친절해서 초기 설정에 시간이 좀 걸렸어요.",
+                helpful: 8,
+                verified: true
+            },
+            {
+                name: "홍길동",
+                initial: "홍",
+                date: "2025년 8월 20일",
+                rating: 5,
+                text: "대만족입니다! 직장 동료 추천으로 구매했는데 정말 탁월한 선택이었어요. 성능, 디자인, 가격 모든 면에서 만족스럽습니다. 벌써 가족들 것도 주문했어요.",
+                helpful: 22,
+                verified: true
+            },
+            {
+                name: "송미래",
+                initial: "송",
+                date: "2025년 8월 19일",
+                rating: 4,
+                text: "아이가 너무 좋아해요! 안전성도 검증되어 있고 사용법도 간단해서 만족합니다. 다만 가격이 조금 부담되긴 하지만 품질을 생각하면 납득할 만해요.",
+                helpful: 14,
+                verified: false
+            },
+            {
+                name: "임태수",
+                initial: "임",
+                date: "2025년 8월 18일",
+                rating: 5,
+                text: "10점 만점에 10점! 기대하지 않았는데 정말 놀랐어요. 특히 고객 지원팀이 정말 프로페셔널하더라고요. 문의사항에 대한 답변도 빠르고 정확해서 신뢰가 갑니다.",
+                helpful: 19,
+                verified: true
+            }
+        ];
+
+        let currentReviews = 6;
+
+        function createStars(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<span class="star">★</span>';
+                } else {
+                    starsHTML += '<span class="star empty">☆</span>';
+                }
+            }
+            return starsHTML;
+        }
+
+        function createReviewCard(review) {
+            return `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="profile-img">${review.initial}</div>
+                        <div class="review-info">
+                            <div class="reviewer-name">${review.name}</div>
+                            <div class="review-date">${review.date}</div>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        ${createStars(review.rating)}
+                    </div>
+                    <div class="review-text">${review.text}</div>
+                    <div class="review-footer">
+                        <div class="helpful-section">
+                            도움이 되었나요?
+                            <button class="helpful-btn" onclick="markHelpful(this)">도움됨 ${review.helpful}</button>
+                        </div>
+                        ${review.verified ? '<span class="verified-badge">✓ 구매확인</span>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadReviews() {
+            const reviewsGrid = document.getElementById('reviewsGrid');
+            reviewsGrid.innerHTML = '';
+            
+            for (let i = 0; i < Math.min(currentReviews, reviews.length); i++) {
+                reviewsGrid.innerHTML += createReviewCard(reviews[i]);
+            }
+
+            // Hide load more button if all reviews are loaded
+            const loadMoreBtn = document.querySelector('.load-more');
+            if (currentReviews >= reviews.length) {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        function loadMoreReviews() {
+            currentReviews += 3;
+            loadReviews();
+        }
+
+        function markHelpful(button) {
+            const currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+            button.textContent = `도움됨 ${currentCount + 1}`;
+            button.style.background = '#8B7355';
+            button.style.color = 'white';
+            button.style.borderColor = '#8B7355';
+            button.disabled = true;
+            button.style.cursor = 'not-allowed';
+        }
+
+        // Initialize page
+        window.onload = function() {
+            loadReviews();
+        };
+    </script>
+</body>
+</html>
